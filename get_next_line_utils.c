@@ -6,17 +6,19 @@
 /*   By: thribeir <thribeir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 18:51:14 by thribeir          #+#    #+#             */
-/*   Updated: 2025/09/09 20:32:15 by thribeir         ###   ########.fr       */
+/*   Updated: 2025/09/09 21:17:04 by thribeir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *str)
+size_t	gnl_strlen(const char *str)
 {
 	size_t	count;
 
 	count = 0;
+	if (str == NULL)
+		return (0);
 	while (*str)
 	{
 		count++;
@@ -25,7 +27,7 @@ size_t	ft_strlen(const char *str)
 	return (count);
 }
 
-char	*ft_strchr(const char *str, int c)
+char	*gnl_strchr(const char *str, int c)
 {
 	while (*str)
 	{
@@ -85,16 +87,22 @@ size_t	ft_strlcpy(char *dest, const char *src, size_t size)
 	return (i);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*gnl_strjoin(char *s1, char const *s2)
 {
 	char	*dest;
+	char	*orig_s1;
 	size_t	len;
 
-	len = ft_strlen(s1) + ft_strlen(s2) + 1;
+	orig_s1 = s1;
+	if (s1 == NULL)
+		s1 = "";
+	len = gnl_strlen(s1) + gnl_strlen(s2) + 1;
 	dest = malloc(len);
 	if (dest == NULL)
 		return (NULL);
 	ft_strlcpy(dest, s1, len);
 	ft_strlcat(dest, s2, len);
+	if (orig_s1 != NULL)
+		free(orig_s1);
 	return (dest);
 }
