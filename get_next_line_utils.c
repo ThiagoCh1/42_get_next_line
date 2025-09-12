@@ -6,7 +6,7 @@
 /*   By: thribeir <thribeir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 18:51:14 by thribeir          #+#    #+#             */
-/*   Updated: 2025/09/10 23:53:55 by thribeir         ###   ########.fr       */
+/*   Updated: 2025/09/12 22:12:38 by thribeir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ size_t	gnl_strlen(const char *str)
 
 char	*gnl_strchr(const char *str, int c)
 {
+	if (str == NULL)
+		return (NULL);
 	while (*str)
 	{
 		if (*str == c)
