@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thribeir <thribeir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/08 11:58:38 by thribeir          #+#    #+#             */
-/*   Updated: 2025/09/13 15:31:13 by thribeir         ###   ########.fr       */
+/*   Created: 2025/09/13 14:26:44 by thribeir          #+#    #+#             */
+/*   Updated: 2025/09/13 15:30:11 by thribeir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*read_to_stash(int fd, char *stash)
 {
@@ -96,51 +96,53 @@ char	*new_stash(char *stash)
 	return (new_stash);
 }
 
-char	*get_next_line(int fd)
+char	*get_next_line_bonus(int fd)
 {
-	static char	*stash;
+	static char	*stash[OPEN_MAX];
 	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	stash = read_to_stash(fd, stash);
-	if (stash == NULL)
+	stash[fd] = read_to_stash(fd, stash[fd]);
+	if (stash[fd] == NULL)
 		return (NULL);
-	line = get_line(stash);
-	stash = new_stash(stash);
+	line = get_line(stash[fd]);
+	stash[fd] = new_stash(stash[fd]);
 	return (line);
 }
 
 /*#include <stdio.h>
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
-    int   fd;
-    char *line;
-    int   i = 1;
+	int		fd;
+	char	*line;
+	int		i;
 
-    if (argc == 2)
-    {
-        fd = open(argv[1], O_RDONLY);
-        if (fd < 0)
-        {
-            perror("open");
-            return (1);
-        }
-    }
-    else
-    {
-        printf("Usage: %s <filename>\n", argv[0]);
-        return (1);
-    }
-
-    while ((line = get_next_line(fd)) != NULL)
-    {
-        printf("Line %d: %s", i++, line);
-        free(line);
-    }
-
-    close(fd);
-    return (0);
+	if (argc < 2)
+	{
+		printf("Usage: %s <file1> [file2 ...]\n", argv[0]);
+		return (1);
+	}
+	i = 1;
+	while (i < argc)
+	{
+		fd = open(argv[i], O_RDONLY);
+		if (fd < 0)
+		{
+			perror("open");
+			i++;
+			continue ;
+		}
+		printf("\n=== Reading %s ===\n", argv[i]);
+		while ((line = get_next_line_bonus(fd)) != NULL)
+		{
+			printf("%s", line); // line already has '\n' if present
+			free(line);
+		}
+		close(fd);
+		i++;
+	}
+	return (0);
 }
 */
