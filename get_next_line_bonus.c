@@ -6,13 +6,13 @@
 /*   By: thribeir <thribeir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 14:26:44 by thribeir          #+#    #+#             */
-/*   Updated: 2025/09/13 15:30:11 by thribeir         ###   ########.fr       */
+/*   Updated: 2025/10/14 05:05:51 by thribeir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
 
-char	*read_to_stash(int fd, char *stash)
+char	*read_to_stash_bonus(int fd, char *stash)
 {
 	ssize_t	nread;
 	char	*buf;
@@ -40,7 +40,7 @@ char	*read_to_stash(int fd, char *stash)
 	return (stash);
 }
 
-char	*get_line(char *stash)
+char	*get_line_bonus(char *stash)
 {
 	char		*line;
 	size_t		i;
@@ -69,7 +69,7 @@ char	*get_line(char *stash)
 	return (line);
 }
 
-char	*new_stash(char *stash)
+char	*new_stash_bonus(char *stash)
 {
 	char	*new_stash;
 	char	*new_pos;
@@ -96,18 +96,18 @@ char	*new_stash(char *stash)
 	return (new_stash);
 }
 
-char	*get_next_line_bonus(int fd)
+char	*get_next_line(int fd)
 {
 	static char	*stash[OPEN_MAX];
 	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	stash[fd] = read_to_stash(fd, stash[fd]);
+	stash[fd] = read_to_stash_bonus(fd, stash[fd]);
 	if (stash[fd] == NULL)
 		return (NULL);
-	line = get_line(stash[fd]);
-	stash[fd] = new_stash(stash[fd]);
+	line = get_line_bonus(stash[fd]);
+	stash[fd] = new_stash_bonus(stash[fd]);
 	return (line);
 }
 

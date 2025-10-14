@@ -6,7 +6,7 @@
 /*   By: thribeir <thribeir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 11:58:38 by thribeir          #+#    #+#             */
-/*   Updated: 2025/09/13 15:31:13 by thribeir         ###   ########.fr       */
+/*   Updated: 2025/10/14 05:05:15 by thribeir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	*read_to_stash(int fd, char *stash)
 	return (stash);
 }
 
-char	*get_line(char *stash)
+char	*get_linee(char *stash)
 {
 	char		*line;
 	size_t		i;
@@ -106,7 +106,7 @@ char	*get_next_line(int fd)
 	stash = read_to_stash(fd, stash);
 	if (stash == NULL)
 		return (NULL);
-	line = get_line(stash);
+	line = get_linee(stash);
 	stash = new_stash(stash);
 	return (line);
 }
