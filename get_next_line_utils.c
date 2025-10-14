@@ -6,7 +6,7 @@
 /*   By: thribeir <thribeir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 18:51:14 by thribeir          #+#    #+#             */
-/*   Updated: 2025/09/12 22:12:38 by thribeir         ###   ########.fr       */
+/*   Updated: 2025/10/14 20:59:59 by thribeir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,11 @@ char	*gnl_strchr(const char *str, int c)
 		return (NULL);
 	while (*str)
 	{
-		if (*str == c)
+		if (*str == (char)c)
 			return ((char *)str);
 		str++;
 	}
-	if (c == '\0')
+	if ((char)c == '\0')
 		return ((char *)str);
 	return (NULL);
 }
@@ -98,10 +98,16 @@ char	*gnl_strjoin(char *s1, char const *s2)
 	orig_s1 = s1;
 	if (s1 == NULL)
 		s1 = "";
+	if (s2 == NULL)
+		s2 = "";
 	len = gnl_strlen(s1) + gnl_strlen(s2) + 1;
 	dest = malloc(len);
 	if (dest == NULL)
+	{
+		if (orig_s1 != NULL)
+			free(orig_s1);
 		return (NULL);
+	}
 	ft_strlcpy(dest, s1, len);
 	ft_strlcat(dest, s2, len);
 	if (orig_s1 != NULL)
