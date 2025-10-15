@@ -6,7 +6,7 @@
 /*   By: thribeir <thribeir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 14:27:37 by thribeir          #+#    #+#             */
-/*   Updated: 2025/09/13 14:28:52 by thribeir         ###   ########.fr       */
+/*   Updated: 2025/10/14 23:32:19 by thribeir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,8 @@ size_t	gnl_strlen(const char *str)
 	count = 0;
 	if (str == NULL)
 		return (0);
-	while (*str)
-	{
+	while (str[count] != '\0')
 		count++;
-		str++;
-	}
 	return (count);
 }
 
@@ -33,40 +30,13 @@ char	*gnl_strchr(const char *str, int c)
 		return (NULL);
 	while (*str)
 	{
-		if (*str == c)
+		if (*str == (char)c)
 			return ((char *)str);
 		str++;
 	}
-	if (c == '\0')
+	if ((char)c == '\0')
 		return ((char *)str);
 	return (NULL);
-}
-
-size_t	ft_strlcat(char *dest, const char *src, size_t size)
-{
-	size_t	dest_len;
-	size_t	src_len;
-	size_t	i;
-	size_t	j;
-
-	j = 0;
-	dest_len = 0;
-	src_len = 0;
-	while (dest_len < size && dest[dest_len] != '\0')
-		dest_len++;
-	while (src[src_len])
-		src_len++;
-	if (dest_len >= size)
-		return (dest_len + src_len);
-	i = dest_len;
-	while (i < size - 1 && src[j])
-	{
-		dest[i] = src[j];
-		i++;
-		j++;
-	}
-	dest[i] = '\0';
-	return (dest_len + src_len);
 }
 
 size_t	ft_strlcpy(char *dest, const char *src, size_t size)
@@ -76,7 +46,7 @@ size_t	ft_strlcpy(char *dest, const char *src, size_t size)
 	i = 0;
 	if (size > 0)
 	{
-		while (i < size - 1 && src[i])
+		while (i + 1 < size && src[i])
 		{
 			dest[i] = src[i];
 			i++;
@@ -89,22 +59,52 @@ size_t	ft_strlcpy(char *dest, const char *src, size_t size)
 	return (i);
 }
 
-char	*gnl_strjoin(char *s1, char const *s2)
+size_t	ft_strlcat(char *dest, const char *src, size_t size)
+{
+	size_t	dlen;
+	size_t	slen;
+	size_t	i;
+
+	dlen = 0;
+	while (dlen < size && dest[dlen])
+		dlen++;
+	slen = 0;
+	while (src[slen])
+		slen++;
+	if (dlen == size)
+		return (size + slen);
+	i = 0;
+	while (dlen + i + 1 < size && src[i])
+	{
+		dest[dlen + i] = src[i];
+		i++;
+	}
+	dest[dlen + i] = '\0';
+	return (dlen + slen);
+}
+
+char	*gnl_strjoin(char *s1, const char *s2)
 {
 	char	*dest;
-	char	*orig_s1;
+	char	*orig;
 	size_t	len;
 
-	orig_s1 = s1;
+	orig = s1;
 	if (s1 == NULL)
 		s1 = "";
+	if (s2 == NULL)
+		s2 = "";
 	len = gnl_strlen(s1) + gnl_strlen(s2) + 1;
 	dest = malloc(len);
-	if (dest == NULL)
+	if (!dest)
+	{
+		if (orig != NULL)
+			free(orig);
 		return (NULL);
+	}
 	ft_strlcpy(dest, s1, len);
 	ft_strlcat(dest, s2, len);
-	if (orig_s1 != NULL)
-		free(orig_s1);
+	if (orig != NULL)
+		free(orig);
 	return (dest);
 }

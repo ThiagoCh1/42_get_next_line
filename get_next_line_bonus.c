@@ -6,13 +6,13 @@
 /*   By: thribeir <thribeir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 14:26:44 by thribeir          #+#    #+#             */
-/*   Updated: 2025/10/14 05:05:51 by thribeir         ###   ########.fr       */
+/*   Updated: 2025/10/14 23:27:57 by thribeir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
 
-char	*read_to_stash_bonus(int fd, char *stash)
+static char	*read_to_stash(int fd, char *stash)
 {
 	ssize_t	nread;
 	char	*buf;
@@ -20,13 +20,13 @@ char	*read_to_stash_bonus(int fd, char *stash)
 	buf = malloc(BUFFER_SIZE + 1);
 	if (!buf)
 		return (NULL);
-	while (!gnl_strchr(stash, '\n'))
+	while (!stash || !gnl_strchr(stash, '\n'))
 	{
 		nread = read(fd, buf, BUFFER_SIZE);
 		if (nread <= 0)
 		{
 			free(buf);
-			if (nread == -1 || !stash || !stash[0])
+			if (nread == -1 || !stash || stash[0] == '\0')
 			{
 				free(stash);
 				return (NULL);
@@ -40,24 +40,21 @@ char	*read_to_stash_bonus(int fd, char *stash)
 	return (stash);
 }
 
-char	*get_line_bonus(char *stash)
+static char	*get_linee(char *stash)
 {
-	char		*line;
-	size_t		i;
-	size_t		j;
+	char	*line;
+	size_t	i;
+	size_t	j;
 
+	if (!stash || stash[0] == '\0')
+		return (NULL);
 	i = 0;
-	while (stash[i])
-	{
-		if (stash[i] == '\n')
-		{
-			i++;
-			break ;
-		}
+	while (stash[i] && stash[i] != '\n')
 		i++;
-	}
+	if (stash[i] == '\n')
+		i++;
 	line = malloc(i + 1);
-	if (line == NULL)
+	if (!line)
 		return (NULL);
 	j = 0;
 	while (j < i)
@@ -69,31 +66,29 @@ char	*get_line_bonus(char *stash)
 	return (line);
 }
 
-char	*new_stash_bonus(char *stash)
+static char	*new_stash(char *stash)
 {
-	char	*new_stash;
-	char	*new_pos;
-	size_t	i;
+	char	*nl;
+	char	*res;
+	size_t	len;
 
-	new_pos = gnl_strchr(stash, '\n');
-	if (new_pos == NULL)
+	nl = gnl_strchr(stash, '\n');
+	if (nl == NULL || *(nl + 1) == '\0')
 	{
 		free(stash);
 		return (NULL);
 	}
-	new_pos += 1;
-	new_stash = malloc(gnl_strlen(new_pos) + 1);
-	if (new_stash == NULL)
+	nl++;
+	len = gnl_strlen(nl);
+	res = malloc(len + 1);
+	if (!res)
 	{
 		free(stash);
 		return (NULL);
 	}
-	i = -1;
-	while (++i < gnl_strlen(new_pos))
-		new_stash[i] = new_pos[i];
-	new_stash[i] = '\0';
+	ft_strlcpy(res, nl, len + 1);
 	free(stash);
-	return (new_stash);
+	return (res);
 }
 
 char	*get_next_line(int fd)
@@ -101,13 +96,13 @@ char	*get_next_line(int fd)
 	static char	*stash[OPEN_MAX];
 	char		*line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || fd >= OPEN_MAX || BUFFER_SIZE <= 0)
 		return (NULL);
-	stash[fd] = read_to_stash_bonus(fd, stash[fd]);
-	if (stash[fd] == NULL)
+	stash[fd] = read_to_stash(fd, stash[fd]);
+	if (!stash[fd])
 		return (NULL);
-	line = get_line_bonus(stash[fd]);
-	stash[fd] = new_stash_bonus(stash[fd]);
+	line = get_linee(stash[fd]);
+	stash[fd] = new_stash(stash[fd]);
 	return (line);
 }
 
