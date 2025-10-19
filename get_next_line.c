@@ -6,7 +6,7 @@
 /*   By: thribeir <thribeir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 11:58:38 by thribeir          #+#    #+#             */
-/*   Updated: 2025/10/19 13:31:11 by thribeir         ###   ########.fr       */
+/*   Updated: 2025/10/19 17:05:56 by thribeir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ char	*new_stash(char *stash)
 	size_t	len;
 
 	nl = gnl_strchr(stash, '\n');
-	if (nl == NULL || *(nl + 1) == '\0')
+	if ((nl == NULL || *(nl + 1) == '\0') && stash)
 	{
 		free(stash);
 		return (NULL);
